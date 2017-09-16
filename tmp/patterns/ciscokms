@@ -1,0 +1,38 @@
+#Customer Pattern
+HDSTAG ([a-zA-Z\d])+:
+HDSTAG01 kms:|avalon:
+HDSTAG02 <%{POSINT:syslog_pri}>%{HDSTAG01:source}
+HDSTAG03 [a-zA-Z\s]+
+HDSTAG04 (\(%{WORD} = %{URI} \- %{WORD}\: \(%{HDSTAG03:hdserrtrack}\)\)
+
+TIMEZONE01 (?:Z|[+-]%{INT})
+TIMESTAMP01 %{YEAR}-%{MONTHNUM}-%{MONTHDAY}[T ]%{HOUR}:?%{MINUTE}(?::?%{SECOND})?[T ]\(%{TIMEZONE01}\)?
+TIMESTAMP02 %{MONTH} +%{MONTHDAY} %{YEAR} %{TIME}
+
+CISCOHDSRES [a-z0-9]+-%{INT}-(?:[a-z0-9_]+)-%{INT}|[a-zA-Z0-9._-]+
+CISCOHDSACTION [A-Z0-9]+:(?:[A-Z0-9_]+)
+CISCOREQID [a-z0-9]+-[a-z0-9]+-[a-z0-9]+-[a-z0-9]+-[a-z0-9]+
+CISCOHDSMSG Pinging mercury registration from reconnect handler, count|Activity Catchup Task -|ChangeSet left conversations need to be synced:|ChangeSet current conversations need to be synced:|ChangeSet current conversations need to be synced:|Regular message activity id|BBDebug: request id|Authorization p$|Slow dns lookup for|Slow dns lookup for|DNS query\(long\):
+CISCOHDSERROR Health check failed:
+CISCOHDSERRCAUSE Error executing request
+
+# HDS Filter
+CISCOHDS001 <%{POSINT:syslog_pri}>%{HDSTAG:source} %{TIMESTAMP01:date} %{LOGLEVEL:level}(?:\s\s|\s)%{WORD:hdsinstance} \[%{WORD}\] \- (?:Health check status: %{WORD:kmshealth}) \((?:memory usage: %{NUMBER:kmsmemMB}) MB\) %{GREEDYDATA:kmssource}
+CISCOHDS002 <%{POSINT:syslog_pri}>%{HDSTAG:source} %{TIMESTAMP01:date} %{LOGLEVEL:level}  %{WORD:hdsinstance} \[%{CISCOHDSRES:hdsresource}\] \- \[%{CISCOHDSACTION:hdsaction}\] \(id:(?:%{INT}|%{UUID})\) received, requestId: %{CISCOREQID:hdsrequestID}\, deviceId: %{URI:hdsdeviceID}\, method: %{WORD:hdsmethod}\, type: %{WORD:hdstype}\, URI: %{URI:hdskeyURI}\, userId: %{CISCOREQID:hdsuserID}\, ecdheKid: %{URI:hdsecdheKid} %{GREEDYDATA:hdssource}
+CISCOHDS003 <%{POSINT:syslog_pri}>%{HDSTAG:source} %{TIMESTAMP01:date} %{LOGLEVEL:level}(?:\s\s|\s)%{WORD:hdsinstance} \[%{CISCOHDSRES:hdsresource}\] \- %{CISCOHDSMSG}\=%{INT:m_reconnect_handler} %{GREEDYDATA:hdssource}
+CISCOHDS004 <%{POSINT:syslog_pri}>%{HDSTAG:source} %{TIMESTAMP01:date} %{LOGLEVEL:level}(?:\s\s|\s)%{WORD:hdsinstance} \[%{CISCOHDSRES:hdsresource}\] \- %{CISCOHDSMSG} %{WORD:hds_task_state} \- Start time\: %{DATESTAMP_OTHER:hds_task_start}\, End Time\: %{DATESTAMP_OTHER:hds_task_end}\, Adhoc\: %{WORD:hds_task_sub} %{GREEDYDATA:hdssource}
+CISCOHDS005 <%{POSINT:syslog_pri}>%{HDSTAG:source} %{TIMESTAMP01:date} %{LOGLEVEL:level}(?:\s\s|\s)%{WORD:hdsinstance} \[%{CISCOHDSRES:hdsresource}\] \- %{CISCOHDSMSG} %{INT:adr_sync} %{GREEDYDATA:hdssource}
+CISCOHDS006 <%{POSINT:syslog_pri}>%{HDSTAG:source} %{TIMESTAMP01:date} %{LOGLEVEL:level}(?:\s\s|\s)%{WORD:hdsinstance} \[%{CISCOHDSRES:hdsresource}\] \- %{CISCOHDSMSG} %{UUID:hds_msg_id} with %{INT:hds_hmac} hmac terms took %{INT:hds_mills} millis to index. %{GREEDYDATA:hdssource}
+CISCOHDS007 <%{POSINT:syslog_pri}>%{HDSTAG:source} %{TIMESTAMP01:date} %{LOGLEVEL:level}(?:\s\s|\s)%{WORD:hdsinstance} \[%{CISCOHDSRES:hdsresource}\] \- %{CISCOHDSMSG} %{UUID:hds_request_id} not matched. %{GREEDYDATA:hdssource}
+CISCOHDS008 <%{POSINT:syslog_pri}>%{HDSTAG:source} %{TIMESTAMP01:date} %{LOGLEVEL:level}(?:\s\s|\s)%{WORD:hdsinstance} \[%{CISCOHDSRES:hdsresource}\] \- %{CISCOHDSMSG} \(url = %{URI:hds_failed_url}\) %{GREEDYDATA:hdssource}
+#
+# <11>kms: 2017-09-15 11:32:37.350 (+0000) ERROR KMS [main] - Health check failed: Error executing request (url = https://encryption-a.wbx2.com/encryption/api/v1/kms/99c264ee-5392-4aa0-8ddc-76b70fe70d39/health - trackingId: (no trackingId)) (count 1) (KmsServer.java:563)
+CISCOHDS009 <%{POSINT:syslog_pri}>%{HDSTAG:source} %{TIMESTAMP01:date} %{LOGLEVEL:level} %{WORD:hdsinstance} \[%{CISCOHDSRES:hdsresource}\] \- %{CISCOHDSERROR:hdserror} %{CISCOHDSERRCAUSE:hdserrcause} %{HDSTAG04:hdserrmsg} \(%{WORD} %{INT}\) %{GREEDYDATA:hdssource}
+#
+# <14>avalon: 2017-09-15 11:30:02.516 (+0000) INFO  ADR [ServiceMonitor] - Slow dns lookup for identity.webex.com: 514ms (ParallelDnsResolver.java:116) 
+CISCOHDS010 <%{POSINT:syslog_pri}>%{HDSTAG:source} %{TIMESTAMP01:date} %{LOGLEVEL:level}(?:\s\s|\s)%{WORD:hdsinstance} \[%{CISCOHDSRES:hdsresource}\] \- %{CISCOHDSMSG} %{HOSTNAME:dnsresource}\: %{INT:dnsresptime}ms %{GREEDYDATA:hdssource}
+#
+# <14>avalon: 2017-09-15 11:30:02.515 (+0000) INFO  ADR [ServiceMonitor] - DNS query(long):  513ms, query: identity.webex.com.  (LoggingResolver.java:97) 
+CISCOHDS011 <%{POSINT:syslog_pri}>%{HDSTAG:source} %{TIMESTAMP01:date} %{LOGLEVEL:level}(?:\s\s|\s)%{WORD:hdsinstance} \[%{CISCOHDSRES:hdsresource}\] \- %{CISCOHDSMSG}  %{INT:dnsresptime}ms, query: %{HOSTNAME:dnsresource}. %{GREEDYDATA:hdssource}
+
+#End Cisco HSD Pattern
