@@ -37,32 +37,32 @@ log_file = "/var/log/spark_proc.log"
 
 def get_KMS_requests():
 	url = 'http://elk:9200/_search?pretty=true'
-	data = """
-		{
-    			"_source": ["hdsuserID"],
-     			"size": 10000,
-    			"query": {
-				"constant_score": { 
-						"filter": {
-							"bool" : {
-								"must": {
-									"match": {
-										"hdsaction": {
-										"query": "KMS:REQUEST",
-										"type": "phrase"
-									}
-								}
-							},
-							"must_not": {
-								"exists": {
-									"field": "userinfo.created"
-								}
-							}
-						}
-					}
-				}
-			}
-		}"""
+	data =  '''{
+            "_source": [
+                "hdsuserID"
+            ],
+            "size": 10000,
+            "query": {
+                "constant_score": {
+                    "filter": {
+                        "bool": {
+                            "must": {
+                                "match": {
+                                    "hdsaction": {
+                                        "query": "KMS:REQUEST",
+                                        "type": "phrase"
+                                    }
+                                }
+                            },
+                            "must_not": [
+                                {"exists": {"field": "userinfo.created"}},
+                                {"match":{"hdsuserID":"null"}}
+                                ]
+                            }
+                        }
+                    }
+                }
+            }'''
 	response = requests.get(url,data = data)
 	jResp = json.loads(response.content.decode('utf-8'))
 	return jResp 
@@ -225,6 +225,7 @@ while  True:
 			# check for broken records with no hdsuserID field
 			if 'hdsuserID' in userid["_source"]:
 				# more housekeeping for empty records
+				if userid["_source"]["hdsuserID"] == 'null': continue
 				if userid["_source"]["hdsuserID"]:
 					logging.debug('checking userinfo already in elastic: %s ', userid["_source"]["hdsuserID"] )
 					uinfo = get_user_info_elastic( userid["_source"]["hdsuserID"] )

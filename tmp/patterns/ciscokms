@@ -17,22 +17,33 @@ CISCOHDSERROR Health check failed:
 CISCOHDSERRCAUSE Error executing request
 
 # HDS Filter
-CISCOHDS001 <%{POSINT:syslog_pri}>%{HDSTAG:source} %{TIMESTAMP01:date} %{LOGLEVEL:level}(?:\s\s|\s)%{WORD:hdsinstance} \[%{WORD}\] \- (?:Health check status: %{WORD:kmshealth}) \((?:memory usage: %{NUMBER:kmsmemMB}) MB\) %{GREEDYDATA:kmssource}
-CISCOHDS002 <%{POSINT:syslog_pri}>%{HDSTAG:source} %{TIMESTAMP01:date} %{LOGLEVEL:level}  %{WORD:hdsinstance} \[%{CISCOHDSRES:hdsresource}\] \- \[%{CISCOHDSACTION:hdsaction}\] \(id:(?:%{INT}|%{UUID})\) received, requestId: %{CISCOREQID:hdsrequestID}\, deviceId: %{URI:hdsdeviceID}\, method: %{WORD:hdsmethod}\, type: %{WORD:hdstype}\, URI: %{URI:hdskeyURI}\, userId: %{CISCOREQID:hdsuserID}\, ecdheKid: %{URI:hdsecdheKid} %{GREEDYDATA:hdssource}
-CISCOHDS003 <%{POSINT:syslog_pri}>%{HDSTAG:source} %{TIMESTAMP01:date} %{LOGLEVEL:level}(?:\s\s|\s)%{WORD:hdsinstance} \[%{CISCOHDSRES:hdsresource}\] \- %{CISCOHDSMSG}\=%{INT:m_reconnect_handler} %{GREEDYDATA:hdssource}
-CISCOHDS004 <%{POSINT:syslog_pri}>%{HDSTAG:source} %{TIMESTAMP01:date} %{LOGLEVEL:level}(?:\s\s|\s)%{WORD:hdsinstance} \[%{CISCOHDSRES:hdsresource}\] \- %{CISCOHDSMSG} %{WORD:hds_task_state} \- Start time\: %{DATESTAMP_OTHER:hds_task_start}\, End Time\: %{DATESTAMP_OTHER:hds_task_end}\, Adhoc\: %{WORD:hds_task_sub} %{GREEDYDATA:hdssource}
-CISCOHDS005 <%{POSINT:syslog_pri}>%{HDSTAG:source} %{TIMESTAMP01:date} %{LOGLEVEL:level}(?:\s\s|\s)%{WORD:hdsinstance} \[%{CISCOHDSRES:hdsresource}\] \- %{CISCOHDSMSG} %{INT:adr_sync} %{GREEDYDATA:hdssource}
-CISCOHDS006 <%{POSINT:syslog_pri}>%{HDSTAG:source} %{TIMESTAMP01:date} %{LOGLEVEL:level}(?:\s\s|\s)%{WORD:hdsinstance} \[%{CISCOHDSRES:hdsresource}\] \- %{CISCOHDSMSG} %{UUID:hds_msg_id} with %{INT:hds_hmac} hmac terms took %{INT:hds_mills} millis to index. %{GREEDYDATA:hdssource}
-CISCOHDS007 <%{POSINT:syslog_pri}>%{HDSTAG:source} %{TIMESTAMP01:date} %{LOGLEVEL:level}(?:\s\s|\s)%{WORD:hdsinstance} \[%{CISCOHDSRES:hdsresource}\] \- %{CISCOHDSMSG} %{UUID:hds_request_id} not matched. %{GREEDYDATA:hdssource}
-CISCOHDS008 <%{POSINT:syslog_pri}>%{HDSTAG:source} %{TIMESTAMP01:date} %{LOGLEVEL:level}(?:\s\s|\s)%{WORD:hdsinstance} \[%{CISCOHDSRES:hdsresource}\] \- %{CISCOHDSMSG} \(url = %{URI:hds_failed_url}\) %{GREEDYDATA:hdssource}
+CISCOHDS001 <%{POSINT:syslog_pri}>%{WORD:source}:\s+%{TIMESTAMP01}\s+%{LOGLEVEL:level}\s+%{WORD:hdsinstance}\s+\[%{WORD}\]\s+\-\s+Health check status:\s+%{WORD:kmshealth}\s+\(memory\s+usage:\s+%{NUMBER:kmsmemMB}\s+MB\)\s+%{GREEDYDATA:kmssource}
+
+# <14>kms: 2017-09-22 08:29:28.127 (+0000) INFO  KMS [pool-11-thread-195] - [KMS:REQUEST] (id:cba848b5-b623-4af1-8280-8bac9033cb3a) received, requestId: 209e7287-386d-47e8-92f9-c2e2edbf1f40, deviceId: https://ciscospark.com/webhookDevices/14d7bb63-8c37-449d-99e3-e6f0695bdfb6, method: retrieve, type: KEY, URI: kms://hds.collabedge-187.dc-03.com/keys/1b381828-4dd7-4835-a0d1-1dac0a540905, userId: 1fd1cfd4-2f9d-4b33-979e-7ba29f189a47, ecdheKid: https://encryption-a.wbx2.com/encryption/api/v1/ecdhe/fac39be7-a616-442c-9ffd-53a9224988cc (EncryptionKmsMessageHandler.java:215) 
+CISCOHDS002 <%{POSINT:syslog_pri}>%{WORD:source}:\s+%{TIMESTAMP01}\s+%{LOGLEVEL:level}\s+%{WORD:hdsinstance}\s+\[(?<hdsresource>[^\]]+)\]\s+\-\s+\[(?<hdsaction>[^\]]+)\]\s+\(id:[^\)]+\)\s+received,\s+requestId:\s+(?<hdsrequestID>[^,]+),\s+deviceId:\s+(?<hdsdeviceID>[^,]+),\s+method:\s+%{WORD:hdsmethod},\s+type:\s+(?<hdstype>[^,]+),\s+URI:\s+(?<hdskeyURI>[^,]+),\s+userId:\s+(?<hdsuserID>[^,]+),\s+ecdheKid:\s+(?<hdsecdheKid>[^\s]+)\s+%{GREEDYDATA:hdssource}
+
+CISCOHDS003 <%{POSINT:syslog_pri}>%{WORD:source}:\s+%{TIMESTAMP01}\s+%{LOGLEVEL:level}\s+%{WORD:hdsinstance}\s+\[(?<hdsresource>[^\]]+)\]\s+\- %{CISCOHDSMSG}\=%{INT:m_reconnect_handler} %{GREEDYDATA:hdssource}
+CISCOHDS004 <%{POSINT:syslog_pri}>%{WORD:source}:\s+%{TIMESTAMP01}\s+%{LOGLEVEL:level}\s+%{WORD:hdsinstance}\s+\[(?<hdsresource>[^\]]+)\]\s+\- %{CISCOHDSMSG} %{WORD:hds_task_state} \- Start time\: %{DATESTAMP_OTHER:hds_task_start}\, End Time\: %{DATESTAMP_OTHER:hds_task_end}\, Adhoc\: %{WORD:hds_task_sub} %{GREEDYDATA:hdssource}
+CISCOHDS005 <%{POSINT:syslog_pri}>%{WORD:source}:\s+%{TIMESTAMP01}\s+%{LOGLEVEL:level}\s+%{WORD:hdsinstance}\s+\[(?<hdsresource>[^\]]+)\]\s+\- %{CISCOHDSMSG} %{INT:adr_sync} %{GREEDYDATA:hdssource}
+CISCOHDS006 <%{POSINT:syslog_pri}>%{WORD:source}:\s+%{TIMESTAMP01}\s+%{LOGLEVEL:level}\s+%{WORD:hdsinstance}\s+\[(?<hdsresource>[^\]]+)\]\s+\- %{CISCOHDSMSG} %{UUID:hds_msg_id} with %{INT:hds_hmac} hmac terms took %{INT:hds_mills} millis to index. %{GREEDYDATA:hdssource}
+CISCOHDS007 <%{POSINT:syslog_pri}>%{WORD:source}:\s+%{TIMESTAMP01}\s+%{LOGLEVEL:level}\s+%{WORD:hdsinstance}\s+\[(?<hdsresource>[^\]]+)\]\s+\- %{CISCOHDSMSG} %{UUID:hds_request_id} not matched. %{GREEDYDATA:hdssource}
+CISCOHDS008 <%{POSINT:syslog_pri}>%{WORD:source}:\s+%{TIMESTAMP01}\s+%{LOGLEVEL:level}\s+%{WORD:hdsinstance}\s+\[(?<hdsresource>[^\]]+)\]\s+\- %{CISCOHDSMSG} \(url = %{URI:hds_failed_url}\) %{GREEDYDATA:hdssource}
 #
 # <11>kms: 2017-09-15 11:32:37.350 (+0000) ERROR KMS [main] - Health check failed: Error executing request (url = https://encryption-a.wbx2.com/encryption/api/v1/kms/99c264ee-5392-4aa0-8ddc-76b70fe70d39/health - trackingId: (no trackingId)) (count 1) (KmsServer.java:563)
-CISCOHDS009 <%{POSINT:syslog_pri}>%{HDSTAG:source} %{TIMESTAMP01:date} %{LOGLEVEL:level} %{WORD:hdsinstance} \[%{CISCOHDSRES:hdsresource}\] \- %{CISCOHDSERROR:hdserror} %{CISCOHDSERRCAUSE:hdserrcause} %{HDSTAG04:hdserrmsg} \(%{WORD} %{INT}\) %{GREEDYDATA:hdssource}
+CISCOHDS009 <%{POSINT:syslog_pri}>%{WORD:source}:\s+%{TIMESTAMP01}\s+%{LOGLEVEL:level}\s+%{WORD:hdsinstance}\s+\[(?<hdsresource>[^\]]+)\]\s+\- %{CISCOHDSERROR:hdserror} %{CISCOHDSERRCAUSE:hdserrcause} %{HDSTAG04:hdserrmsg} \(%{WORD} %{INT}\) %{GREEDYDATA:hdssource}
 #
+# <14>avalon: 2017-09-22 08:09:06.127 (+0000) INFO ADR [executor.cerberus-executor.0-6] - Slow dns lookup for identity.webex.com: 604ms (ParallelDnsResolver.java:116)
 # <14>avalon: 2017-09-15 11:30:02.516 (+0000) INFO  ADR [ServiceMonitor] - Slow dns lookup for identity.webex.com: 514ms (ParallelDnsResolver.java:116) 
-CISCOHDS010 <%{POSINT:syslog_pri}>%{HDSTAG:source} %{TIMESTAMP01:date} %{LOGLEVEL:level}(?:\s\s|\s)%{WORD:hdsinstance} \[%{CISCOHDSRES:hdsresource}\] \- %{CISCOHDSMSG} %{HOSTNAME:dnsresource}\: %{INT:dnsresptime}ms %{GREEDYDATA:hdssource}
+CISCOHDS010 <%{POSINT:syslog_pri}>%{WORD:source}:\s+%{TIMESTAMP01}\s+%{LOGLEVEL:level}\s+%{WORD:hdsinstance}\s+\[(?<hdsresource>[^\]]+)\]\s+\- %{CISCOHDSMSG} %{HOSTNAME:dnsresource}\: %{INT:dnsresptime}ms %{GREEDYDATA:hdssource}
 #
 # <14>avalon: 2017-09-15 11:30:02.515 (+0000) INFO  ADR [ServiceMonitor] - DNS query(long):  513ms, query: identity.webex.com.  (LoggingResolver.java:97) 
-CISCOHDS011 <%{POSINT:syslog_pri}>%{HDSTAG:source} %{TIMESTAMP01:date} %{LOGLEVEL:level}(?:\s\s|\s)%{WORD:hdsinstance} \[%{CISCOHDSRES:hdsresource}\] \- %{CISCOHDSMSG}  %{INT:dnsresptime}ms, query: %{HOSTNAME:dnsresource}. %{GREEDYDATA:hdssource}
+CISCOHDS011 <%{POSINT:syslog_pri}>%{WORD:source}:\s+%{TIMESTAMP01}\s+%{LOGLEVEL:level}\s+%{WORD:hdsinstance}\s+\[(?<hdsresource>[^\]]+)\]\s+\- %{CISCOHDSMSG}  %{INT:dnsresptime}ms, query: %{HOSTNAME:dnsresource}. %{GREEDYDATA:hdssource}
+
+# <14>kms: 2017-09-22 10:19:43.999 (+0000) INFO  KMS [pool-11-thread-15] - [KMS:RESPONSE] (id:ea73a57c-4d3c-454d-85b9-541995cb2975) sending success response synchronously in 1 ms (KmsMessageHandler.java:118) 
+CISCOHDS012 <%{POSINT:syslog_pri}>%{WORD:source}:\s+%{TIMESTAMP01}\s+%{LOGLEVEL:level}\s+%{WORD:hdsinstance}\s+\[(?<hdsresource>[^\]]+)\]\s+\-\s+\[(?<hdsaction>[^\]]+)\]\s+\(id:[^\)]+\)\s+sending\s+success\s+response\s+synchronously\s+in\s+%{INT:hdssuccessms}[^\(]+\s+%{GREEDYDATA:hdssource}
+
+# <14>kms: 2017-09-22 10:36:57.628 (+0000) INFO KMS [Grizzly(2)] - Mercury event received, type: encryption.kms_message, messageId: d482f049-6264-4209-af3c-127d4a42d70a, trackingId: NA_09831850-883c-4144-a0e5-7b9a88f933a7 (KmsFlowController.java:217)
+CISCOHDS013 <%{POSINT:syslog_pri}>%{WORD:source}:\s+%{TIMESTAMP01}\s+%{LOGLEVEL:level}\s+%{WORD:hdsinstance}\s+\[(?<hdsresource>[^\]]+)\]\s+\-\s+Mercury event received,\s+type:\s+(?<hdsmercuryeventtype>[^,]+),\s+messageId:\s+(?<hdsmercurymessageid>[^,]+),\s+trackingId:\s+(?<hdsmercurytrackingid>[^\s]+)\s+%{GREEDYDATA:hdssource}
+
 
 #End Cisco HSD Pattern
