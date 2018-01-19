@@ -17,7 +17,11 @@ CISCOHDSERROR Health check failed:
 CISCOHDSERRCAUSE Error executing request
 
 # HDS Filter
-CISCOHDS001 <%{POSINT:syslog_pri}>%{WORD:source}:\s+%{TIMESTAMP01}\s+%{LOGLEVEL:level}\s+%{WORD:hdsinstance}\s+\[%{WORD}\]\s+\-\s+Health check status:\s+%{WORD:kmshealth}\s+\(memory\s+usage:\s+%{NUMBER:kmsmemMB}\s+MB\)\s+%{GREEDYDATA:kmssource}
+# Old rule
+# CISCOHDS001 <%{POSINT:syslog_pri}>%{WORD:source}:\s+%{TIMESTAMP01}\s+%{LOGLEVEL:level}\s+%{WORD:hdsinstance}\s+\[%{WORD}\]\s+\-\s+Health check status:\s+%{WORD:kmshealth}\s+\(memory\s+usage:\s+%{NUMBER:kmsmemMB}\s+MB\)\s+%{GREEDYDATA:kmssource}
+# new format of KMS memory messages
+# <14>kms: 2018-01-19 15:20:16.450 (+0000) INFO KMS [main] - Site encryption.a6.ciscospark.com, health check status: OK (memory usage: 249 MB) (KmsServer.java:409)
+CISCOHDS001 <%{POSINT:syslog_pri}>%{WORD:source}:\s+%{TIMESTAMP01}\s+%{LOGLEVEL:level}\s+%{WORD:hdsinstance}\s+\[%{WORD}\]\s+\-\s+Site\s+(?<hdssite>[^,]+),\s+health check status:\s+%{WORD:kmshealth}\s+\(memory\s+usage:\s+%{NUMBER:kmsmemMB}\s+MB\)\s+%{GREEDYDATA:kmssource}
 
 # <14>kms: 2017-09-22 08:29:28.127 (+0000) INFO  KMS [pool-11-thread-195] - [KMS:REQUEST] (id:cba848b5-b623-4af1-8280-8bac9033cb3a) received, requestId: 209e7287-386d-47e8-92f9-c2e2edbf1f40, deviceId: https://ciscospark.com/webhookDevices/14d7bb63-8c37-449d-99e3-e6f0695bdfb6, method: retrieve, type: KEY, URI: kms://hds.collabedge-187.dc-03.com/keys/1b381828-4dd7-4835-a0d1-1dac0a540905, userId: 1fd1cfd4-2f9d-4b33-979e-7ba29f189a47, ecdheKid: https://encryption-a.wbx2.com/encryption/api/v1/ecdhe/fac39be7-a616-442c-9ffd-53a9224988cc (EncryptionKmsMessageHandler.java:215) 
 CISCOHDS002 <%{POSINT:syslog_pri}>%{WORD:source}:\s+%{TIMESTAMP01}\s+%{LOGLEVEL:level}\s+%{WORD:hdsinstance}\s+\[(?<hdsresource>[^\]]+)\]\s+\-\s+\[(?<hdsaction>[^\]]+)\]\s+\(id:[^\)]+\)\s+received,\s+requestId:\s+(?<hdsrequestID>[^,]+),\s+deviceId:\s+(?<hdsdeviceID>[^,]+),\s+method:\s+%{WORD:hdsmethod},\s+type:\s+(?<hdstype>[^,]+),\s+URI:\s+(?<hdskeyURI>[^,]+),\s+userId:\s+(?<hdsuserID>[^,]+),\s+ecdheKid:\s+(?<hdsecdheKid>[^\s]+)\s+%{GREEDYDATA:hdssource}
