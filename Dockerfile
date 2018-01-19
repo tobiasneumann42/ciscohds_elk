@@ -1,4 +1,4 @@
-FROM sebp/elk
+FROM sebp/elk:553
 
 # RUN setcap cap_net_bin_service=+epi /usr/lib/jvm/java-8-openjdk-amd64/bin/java
 RUN setcap cap_net_bind_service=+epi /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
