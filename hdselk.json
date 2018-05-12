@@ -32,7 +32,7 @@
       ],
       "version": 1,
       "kibanaSavedObjectMeta": {
-        "searchSourceJSON": "{\"index\":\"AWEFXbSuRuLXbdz4Bm2H\",\"highlightAll\":true,\"version\":true,\"query\":{\"query_string\":{\"analyze_wildcard\":true,\"query\":\"*\"}},\"filter\":[{\"meta\":{\"negate\":true,\"index\":\"logstash-*\",\"key\":\"host\",\"value\":\"172.16.34.244\",\"disabled\":false,\"alias\":null},\"query\":{\"match\":{\"host\":{\"query\":\"172.16.34.244\",\"type\":\"phrase\"}}},\"$state\":{\"store\":\"appState\"}},{\"meta\":{\"negate\":false,\"index\":\"logstash-*\",\"key\":\"exists\",\"value\":\"kmsmemMB\",\"disabled\":false,\"alias\":null},\"exists\":{\"field\":\"kmsmemMB\"},\"$state\":{\"store\":\"appState\"}}]}"
+        "searchSourceJSON": "{\"index\":\"logstash-*\",\"highlightAll\":true,\"version\":true,\"query\":{\"query_string\":{\"analyze_wildcard\":true,\"query\":\"*\"}},\"filter\":[{\"meta\":{\"negate\":true,\"index\":\"logstash-*\",\"key\":\"host\",\"value\":\"172.16.34.244\",\"disabled\":false,\"alias\":null},\"query\":{\"match\":{\"host\":{\"query\":\"172.16.34.244\",\"type\":\"phrase\"}}},\"$state\":{\"store\":\"appState\"}},{\"meta\":{\"negate\":false,\"index\":\"logstash-*\",\"key\":\"exists\",\"value\":\"kmsmemMB\",\"disabled\":false,\"alias\":null},\"exists\":{\"field\":\"kmsmemMB\"},\"$state\":{\"store\":\"appState\"}}]}"
       }
     }
   },
@@ -53,7 +53,7 @@
       ],
       "version": 1,
       "kibanaSavedObjectMeta": {
-        "searchSourceJSON": "{\"index\":\"AWEFXbSuRuLXbdz4Bm2H\",\"highlightAll\":true,\"version\":true,\"filter\":[{\"$state\":{\"store\":\"appState\"},\"meta\":{\"alias\":null,\"disabled\":false,\"index\":\"logstash-*\",\"key\":\"host\",\"negate\":true,\"value\":\"172.16.128.34\"},\"query\":{\"match\":{\"host\":{\"query\":\"172.16.128.34\",\"type\":\"phrase\"}}}},{\"$state\":{\"store\":\"appState\"},\"bool\":{\"must_not\":{\"exists\":{\"field\":\"kmsmemMB\"}}},\"meta\":{\"alias\":null,\"disabled\":false,\"index\":\"logstash-*\",\"key\":\"bool\",\"negate\":false,\"value\":\"{\\\"must_not\\\":{\\\"exists\\\":{\\\"field\\\":\\\"kmsmemMB\\\"}}}\"}},{\"$state\":{\"store\":\"appState\"},\"meta\":{\"alias\":null,\"disabled\":false,\"index\":\"logstash-*\",\"key\":\"hdsaction\",\"negate\":false,\"value\":\"KMS:REQUEST\"},\"query\":{\"match\":{\"hdsaction\":{\"query\":\"KMS:REQUEST\",\"type\":\"phrase\"}}}}],\"query\":{\"query_string\":{\"analyze_wildcard\":true,\"query\":\"*\"}}}"
+        "searchSourceJSON": "{\"index\":\"logstash-*\",\"highlightAll\":true,\"version\":true,\"filter\":[{\"$state\":{\"store\":\"appState\"},\"meta\":{\"alias\":null,\"disabled\":false,\"index\":\"logstash-*\",\"key\":\"host\",\"negate\":true,\"value\":\"172.16.128.34\"},\"query\":{\"match\":{\"host\":{\"query\":\"172.16.128.34\",\"type\":\"phrase\"}}}},{\"$state\":{\"store\":\"appState\"},\"bool\":{\"must_not\":{\"exists\":{\"field\":\"kmsmemMB\"}}},\"meta\":{\"alias\":null,\"disabled\":false,\"index\":\"logstash-*\",\"key\":\"bool\",\"negate\":false,\"value\":\"{\\\"must_not\\\":{\\\"exists\\\":{\\\"field\\\":\\\"kmsmemMB\\\"}}}\"}},{\"$state\":{\"store\":\"appState\"},\"meta\":{\"alias\":null,\"disabled\":false,\"index\":\"logstash-*\",\"key\":\"hdsaction\",\"negate\":false,\"value\":\"KMS:REQUEST\"},\"query\":{\"match\":{\"hdsaction\":{\"query\":\"KMS:REQUEST\",\"type\":\"phrase\"}}}}],\"query\":{\"query_string\":{\"analyze_wildcard\":true,\"query\":\"*\"}}}"
       }
     }
   },
