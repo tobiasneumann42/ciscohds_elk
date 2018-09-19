@@ -11,7 +11,7 @@ warranty for the content. Samples are not intended to be applied to production e
 Use at your own risk.
 
 /tmp/patterns/ciscokms      - includes sample patterns to parse messages send by Cisco HDS nodes to ELK
-/tmp/scripts/spark_proc.py  - sample script that allows admins of Cisco HDS deployments to enrich the
+/tmp/scripts/csco_teams_proc.py  - sample script that allows admins of Cisco HDS deployments to enrich the
                               logging information with human readable userIDs. This script requires refresh
                               and access token information.
                             
