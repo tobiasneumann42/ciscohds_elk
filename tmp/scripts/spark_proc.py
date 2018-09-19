@@ -9,11 +9,11 @@
 # are missing user information and extracts the UUIDs.
 # The sciprt will next check if a given UUID is already present in ELK from earlier 
 # run. In this case the existing UUID-> user information is applied to the syslog record.
-# In case the user information is not available in ELK the Cisco Spark API is authomatically
+# In case the user information is not available in ELK the Cisco Webex API is authomatically
 # quried to retrieve the required information from the cloud.
 #
 # Script requires a client_id, client_secret, refresh_token which can be optained from 
-# developer.ciscospark.com
+# developer.webex.com
 #
 # This sample script is provided as is. Cisco Systems does not provide any warranty or
 # support. It is not intended for production deployment. Use at your own risk.
@@ -30,10 +30,10 @@ import logging
 from collections import OrderedDict
 from operator import itemgetter
 
-access_token_file = "/tmp/scripts/spark_proc.token"
+access_token_file = "/tmp/scripts/webex_teams_proc.token"
 
 log_level = "logging.DEBUG"
-log_file = "/var/log/spark_proc.log"
+log_file = "/var/log/webex_proc.log"
 
 def get_KMS_requests():
 	url = 'http://elk:9200/_search?pretty=true'
@@ -68,7 +68,7 @@ def get_KMS_requests():
 	return jResp 
 
 def get_access_token(refresh_tok,cltID,cltSec):
-	url = 'https://api.ciscospark.com/v1/access_token'
+	url = 'https://api.webex.com/v1/access_token'
 	response = requests.post( url, {
                                  'refresh_token': refresh_tok,
                                  'grant_type': 'refresh_token',
@@ -119,11 +119,11 @@ def get_user_info_elastic(useruuid):
 	else:
 		return False
 
-def get_user_info_spark(useruuid, authtoken):
-	url = 'https://api.ciscospark.com/v1/people/'+useruuid
+def get_user_info_webex(useruuid, authtoken):
+	url = 'https://api.webex.com/v1/people/'+useruuid
 	auth = 'Bearer ' + authtoken
-	# print( "DEBUG: spark API lookup URL & access token: ", url, auth )
-	logging.debug('Spark API lookup URL & access token: %s %s ', url, auth )
+	# print( "DEBUG: Webex Teams API lookup URL & access token: ", url, auth )
+	logging.debug('Webex API lookup URL & access token: %s %s ', url, auth )
 	response = requests.get ( url, headers={
 					'Content-Type': 'application/json',
 					'Authorization': auth
@@ -132,10 +132,10 @@ def get_user_info_spark(useruuid, authtoken):
 		jResp = json.loads(response.content.decode('utf-8'))
 		resp = {}
 		resp['userinfo'] = jResp
-		# print( "DEBUG: Result 200 OK REST get_user_info_spark: ", resp['userinfo'] )
-		logging.debug('Result 200 OK REST get_user_info_spark : %s ', resp['userinfo'] )
+		# print( "DEBUG: Result 200 OK REST get_user_info_webex: ", resp['userinfo'] )
+		logging.debug('Result 200 OK REST get_user_info_webex : %s ', resp['userinfo'] )
 	else:
-		print( "DEBUG: Result REST get_user_info_spark (raw) something went wrong: ", response )
+		print( "DEBUG: Result REST get_user_info_webex (raw) something went wrong: ", response )
 		input("Press Enter to Continue...")
 
 	return resp
@@ -163,14 +163,14 @@ try:
 	# open token file 
 	access_token_f = open(access_token_file, 'r')
 except FileNotFoundError:
-	# get new access token from spark API
+	# get new access token from webex API
 	access = get_access_token( refresh_token, client_id, client_secret)
 	print( 'Access Token: ', access)
 	logging.debug('access token: ', access)
 	# no access token on file, open file for write
 	access_token_f = open(access_token_file,'w')
-	# for testing define access token manual without call to spark API
-	# access = json.dumps( {'expires_in': 1209599, 'token': 'YzJhYjE4YzUtNGM0OS00ZmM5LTk1YTUtMzk5OGRkZjQ3NzdmYTRiOTJiNTgtM2E3', 'timestamp': 1496069706.3693337} )
+	# for testing define access token manual without call to webex API
+	# access = json.dumps( {'expires_in': 1209599, 'token': 'YzJhYzUtNGM0OS00ZmM5LTk1YTUtMzk5OGRkZjQ3NzdmYTRiOTJiNTgtM2E3', 'timestamp': 1496069706.3693337} )
 	# write token
 	access_token_f.write( json.dumps(access) )
 	# pos = access_token_f.tell()
@@ -187,7 +187,7 @@ else:
 	logging.debug('Timestamp: %s', access["timestamp"] )
 	# check if token read from file has expired
 	if access["timestamp"] + access["expires_in"] < time.time() - 180:
-		# call spark API to get new token
+		# call webex API to get new token
 		access = get_access_token( refresh_token, client_id, client_secret)
 		# write new access token to file
 		access_token_f = open(access_token_file,'w')
@@ -232,9 +232,9 @@ while  True:
 					if not uinfo:
 						# print( "DEBUG: No entry in elastic: ", userid["_source"]["hdsuserID"] )
 						logging.debug('No entry in elastic: %s ', userid["_source"]["hdsuserID"] )
-						uinfo = get_user_info_spark( userid["_source"]["hdsuserID"], access["token"] )
-						# print( "DEBUG: Fetched entry from spark cloud: ", uinfo )
-						logging.debug('Fetched entry from spark cloud: %s ', uinfo )
+						uinfo = get_user_info_webe( userid["_source"]["hdsuserID"], access["token"] )
+						# print( "DEBUG: Fetched entry from webex cloud: ", uinfo )
+						logging.debug('Fetched entry from webex cloud: %s ', uinfo )
 					# print( "DEBUG: execute main loop update: ", userid["_index"], userid["_id"])
 					logging.debug('execute main loop update: %s - %s', userid["_index"], userid["_id"])
 					update_userinfo( userid, uinfo )
