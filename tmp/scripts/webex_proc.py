@@ -68,7 +68,7 @@ def get_KMS_requests():
 	return jResp 
 
 def get_access_token(refresh_tok,cltID,cltSec):
-	url = 'https://api.webex.com/v1/access_token'
+	url = 'https://api.ciscospark.com/v1/access_token'
 	response = requests.post( url, {
                                  'refresh_token': refresh_tok,
                                  'grant_type': 'refresh_token',
@@ -120,7 +120,7 @@ def get_user_info_elastic(useruuid):
 		return False
 
 def get_user_info_webex(useruuid, authtoken):
-	url = 'https://api.webex.com/v1/people/'+useruuid
+	url = 'https://api.ciscospark.com/v1/people/'+useruuid
 	auth = 'Bearer ' + authtoken
 	# print( "DEBUG: Webex Teams API lookup URL & access token: ", url, auth )
 	logging.debug('Webex API lookup URL & access token: %s %s ', url, auth )
