@@ -232,7 +232,7 @@ while  True:
 					if not uinfo:
 						# print( "DEBUG: No entry in elastic: ", userid["_source"]["hdsuserID"] )
 						logging.debug('No entry in elastic: %s ', userid["_source"]["hdsuserID"] )
-						uinfo = get_user_info_webe( userid["_source"]["hdsuserID"], access["token"] )
+						uinfo = get_user_info_webex( userid["_source"]["hdsuserID"], access["token"] )
 						# print( "DEBUG: Fetched entry from webex cloud: ", uinfo )
 						logging.debug('Fetched entry from webex cloud: %s ', uinfo )
 					# print( "DEBUG: execute main loop update: ", userid["_index"], userid["_id"])
