@@ -4,7 +4,7 @@ HDSTAG01 kms:|avalon:
 HDSTAG02 <%{POSINT:syslog_pri}>%{HDSTAG01:source}
 HDSTAG03 [a-zA-Z\s]+
 HDSTAG04 \(%{WORD}\s+=\s+%{URI}\s+\-\s+%{WORD}\:\s+\(%{HDSTAG03:hdserrtrack}\)\)
-HDSTAG05 %{WORD}.%{WORD}|%{WORD}.kms_message 
+HDSTAG05 %{WORD}.%{WORD}|%{WORD}.kms_message
 HDSTAG06 CLIENT_%{UUID}
 HDSTAG07 null|%{NUMBER}
 HDSTAG08 POST|PATCH|GET
@@ -31,120 +31,67 @@ CISCOHDSMSG11 postMessageToClient
 CISCOHDSMSG12 \[KMS:RESPONSE\]
 CISCOHDSMSG13 Health check failed for site|Health check failed:
 
-CISCOHDSMSG %{CISCOHDSMSG01}|%{CISCOHDSMSG02}|%{CISCOHDSMSG03}|%{CISCOHDSMSG04}|%{CISCOHDSMSG05}|%{CISCOHDSMSG06}|%{CISCOHDSMSG07}|%{CISCOHDSMSG08}
-|%{CISCOHDSMSG09}|%{CISCOHDSMSG10}|%{CISCOHDSMSG11}|%{CISCOHDSMSG12}|%{CISCOHDSMSG13}
+CISCOHDSMSG %{CISCOHDSMSG01}|%{CISCOHDSMSG02}|%{CISCOHDSMSG03}|%{CISCOHDSMSG04}|%{CISCOHDSMSG05}|%{CISCOHDSMSG06}|%{CISCOHDSMSG07}|%{CISCOHDSMSG08}|%{CISCOHDSMSG09}|%{CISCOHDSMSG10}|%{CISCOHDSMSG11}|%{CISCOHDSMSG12}|%{CISCOHDSMSG13}
 
-# CISCOHDSMSG Pinging mercury registration from reconnect handler, count|Activity Catchup Task -|ChangeSet left conversations need to be synced:|Ch
-angeSet current conversations need to be synced:|ChangeSet current conversations need$|DNS query\(long\):|doKmsHealthCheck|U2C gettig site urls for
- services encryptionServiceSiteUrls|Slow dns lookup for|Health check failed:
+# CISCOHDSMSG Pinging mercury registration from reconnect handler, count|Activity Catchup Task -|ChangeSet left conversations need to be synced:|ChangeSet current conversations need to be synced:|ChangeSet current conversations need$|DNS query\(long\):|doKmsHealthCheck|U2C gettig site urls for services encryptionServiceSiteUrls|Slow dns lookup for|Health check failed:
 CISCOHDSERROR Health check failed:
 CISCOHDSERRCAUSE Error executing request
 
 # HDS Filter
 # Old rule
-# CISCOHDS001 <%{POSINT:syslog_pri}>%{WORD:source}:\s+%{TIMESTAMP01}\s+%{LOGLEVEL:level}\s+%{WORD:hdsinstance}\s+\[%{WORD}\]\s+\-\s+Health check st
-atus:\s+%{WORD:kmshealth}\s+\(memory\s+usage:\s+%{NUMBER:kmsmemMB}\s+MB\)\s+%{GREEDYDATA:kmssource}
+# CISCOHDS001 <%{POSINT:syslog_pri}>%{WORD:source}:\s+%{TIMESTAMP01}\s+%{LOGLEVEL:level}\s+%{WORD:hdsinstance}\s+\[%{WORD}\]\s+\-\s+Health check status:\s+%{WORD:kmshealth}\s+\(memory\s+usage:\s+%{NUMBER:kmsmemMB}\s+MB\)\s+%{GREEDYDATA:kmssource}
 # new format of KMS memory messages
-# <14>kms: 2018-01-19 15:20:16.450 (+0000) INFO KMS [main] - Site encryption.a6.ciscospark.com, health check status: OK (memory usage: 249 MB) (Kms
-Server.java:409)
-CISCOHDS001 <%{POSINT:syslog_pri}>%{WORD:source}:\s+%{TIMESTAMP01}\s+%{LOGLEVEL:level}\s+%{WORD:hdsinstance}\s+\[(?<hdsresource>[^\]]+)\]\s+\-\s+Si
-te\s+(?<hdssite>[^,]+),\s+health check status:\s+%{WORD:kmshealth}\s+\(memory\s+usage:\s+%{NUMBER:kmsmemMB}\s+MB\)\s+%{GREEDYDATA:kmssource}
+# <14>kms: 2018-01-19 15:20:16.450 (+0000) INFO KMS [main] - Site encryption.a6.ciscospark.com, health check status: OK (memory usage: 249 MB) (KmsServer.java:409)
+CISCOHDS001 <%{POSINT:syslog_pri}>%{WORD:source}:\s+%{TIMESTAMP01}\s+%{LOGLEVEL:level}\s+%{WORD:hdsinstance}\s+\[(?<hdsresource>[^\]]+)\]\s+\-\s+Site\s+(?<hdssite>[^,]+),\s+health check status:\s+%{WORD:kmshealth}\s+\(memory\s+usage:\s+%{NUMBER:kmsmemMB}\s+MB\)\s+%{GREEDYDATA:kmssource}
 
-# <14>kms: 2017-09-22 08:29:28.127 (+0000) INFO  KMS [pool-11-thread-195] - [KMS:REQUEST] (id:cba848b5-b623-4af1-8280-8bac9033cb3a) received, reque
-stId: 209e7287-386d-47e8-92f9-c2e2edbf1f40, deviceId: https://ciscospark.com/webhookDevices/14d7bb63-8c37-449d-99e3-e6f0695bdfb6, method: retrieve,
- type: KEY, URI: kms://hds.collabedge-187.dc-03.com/keys/1b381828-4dd7-4835-a0d1-1dac0a540905, userId: 1fd1cfd4-2f9d-4b33-979e-7ba29f189a47, ecdheK
-id: https://encryption-a.wbx2.com/encryption/api/v1/ecdhe/fac39be7-a616-442c-9ffd-53a9224988cc (EncryptionKmsMessageHandler.java:215) 
-CISCOHDS002 <%{POSINT:syslog_pri}>%{WORD:source}:\s+%{TIMESTAMP01}\s+%{LOGLEVEL:level}\s+%{WORD:hdsinstance}\s+\[(?<hdsresource>[^\]]+)\]\s+\-\s+\[
-(?<hdsaction>[^\]]+)\]\s+\(id:[^\)]+\)\s+received,\s+requestId:\s+(?<hdsrequestID>[^,]+),\s+deviceId:\s+(?<hdsdeviceID>[^,]+),\s+method:\s+%{WORD:h
-dsmethod},\s+type:\s+(?<hdstype>[^,]+),\s+URI:\s+(?<hdskeyURI>[^,]+),\s+userId:\s+(?<hdsuserID>[^,]+),\s+ecdheKid:\s+(?<hdsecdheKid>[^\s]+)\s+%{GRE
-EDYDATA:hdssource}
+# <14>kms: 2017-09-22 08:29:28.127 (+0000) INFO  KMS [pool-11-thread-195] - [KMS:REQUEST] (id:cba848b5-b623-4af1-8280-8bac9033cb3a) received, requestId: 209e7287-386d-47e8-92f9-c2e2edbf1f40, deviceId: https://ciscospark.com/webhookDevices/14d7bb63-8c37-449d-99e3-e6f0695bdfb6, method: retrieve,
+ type: KEY, URI: kms://hds.collabedge-187.dc-03.com/keys/1b381828-4dd7-4835-a0d1-1dac0a540905, userId: 1fd1cfd4-2f9d-4b33-979e-7ba29f189a47, ecdheKid: https://encryption-a.wbx2.com/encryption/api/v1/ecdhe/fac39be7-a616-442c-9ffd-53a9224988cc (EncryptionKmsMessageHandler.java:215)
+CISCOHDS002 <%{POSINT:syslog_pri}>%{WORD:source}:\s+%{TIMESTAMP01}\s+%{LOGLEVEL:level}\s+%{WORD:hdsinstance}\s+\[(?<hdsresource>[^\]]+)\]\s+\-\s+\[(?<hdsaction>[^\]]+)\]\s+\(id:[^\)]+\)\s+received,\s+requestId:\s+(?<hdsrequestID>[^,]+),\s+deviceId:\s+(?<hdsdeviceID>[^,]+),\s+method:\s+%{WORD:hdsmethod},\s+type:\s+(?<hdstype>[^,]+),\s+URI:\s+(?<hdskeyURI>[^,]+),\s+userId:\s+(?<hdsuserID>[^,]+),\s+ecdheKid:\s+(?<hdsecdheKid>[^\s]+)\s+%{GREEDYDATA:hdssource}
 
-#CISCOHDS003 <%{POSINT:syslog_pri}>%{WORD:source}:\s+%{TIMESTAMP01}\s+%{LOGLEVEL:level}\s+%{WORD:hdsinstance}\s+\[(?<hdsresource>[^\]]+)\]\s+\- %{C
-ISCOHDSMSG}\=%{INT:m_reconnect_handler} %{GREEDYDATA:hdssource}
-#CISCOHDS004 <%{POSINT:syslog_pri}>%{WORD:source}:\s+%{TIMESTAMP01}\s+%{LOGLEVEL:level}\s+%{WORD:hdsinstance}\s+\[(?<hdsresource>[^\]]+)\]\s+\- %{C
-ISCOHDSMSG} %{WORD:hds_task_state} \- Start time\: %{DATESTAMP_OTHER:hds_task_start}\, End Time\: %{DATESTAMP_OTHER:hds_task_end}\, Adhoc\: %{WORD:
-hds_task_sub} %{GREEDYDATA:hdssource}
-#CISCOHDS005 <%{POSINT:syslog_pri}>%{WORD:source}:\s+%{TIMESTAMP01}\s+%{LOGLEVEL:level}\s+%{WORD:hdsinstance}\s+\[(?<hdsresource>[^\]]+)\]\s+\- %{C
-ISCOHDSMSG} %{INT:adr_sync} %{GREEDYDATA:hdssource}
-#CISCOHDS006 <%{POSINT:syslog_pri}>%{WORD:source}:\s+%{TIMESTAMP01}\s+%{LOGLEVEL:level}\s+%{WORD:hdsinstance}\s+\[(?<hdsresource>[^\]]+)\]\s+\- %{C
-ISCOHDSMSG} %{UUID:hds_msg_id} with %{INT:hds_hmac} hmac terms took %{INT:hds_mills} millis to index. %{GREEDYDATA:hdssource}
-#CISCOHDS007 <%{POSINT:syslog_pri}>%{WORD:source}:\s+%{TIMESTAMP01}\s+%{LOGLEVEL:level}\s+%{WORD:hdsinstance}\s+\[(?<hdsresource>[^\]]+)\]\s+\- %{C
-ISCOHDSMSG} %{UUID:hds_request_id} not matched. %{GREEDYDATA:hdssource}
-#CISCOHDS008 <%{POSINT:syslog_pri}>%{WORD:source}:\s+%{TIMESTAMP01}\s+%{LOGLEVEL:level}\s+%{WORD:hdsinstance}\s+\[(?<hdsresource>[^\]]+)\]\s+\- %{C
-ISCOHDSMSG} \(url = %{URI:hds_failed_url}\) %{GREEDYDATA:hdssource}
+#CISCOHDS003 <%{POSINT:syslog_pri}>%{WORD:source}:\s+%{TIMESTAMP01}\s+%{LOGLEVEL:level}\s+%{WORD:hdsinstance}\s+\[(?<hdsresource>[^\]]+)\]\s+\- %{CISCOHDSMSG}\=%{INT:m_reconnect_handler} %{GREEDYDATA:hdssource}
+#CISCOHDS004 <%{POSINT:syslog_pri}>%{WORD:source}:\s+%{TIMESTAMP01}\s+%{LOGLEVEL:level}\s+%{WORD:hdsinstance}\s+\[(?<hdsresource>[^\]]+)\]\s+\- %{CISCOHDSMSG} %{WORD:hds_task_state} \- Start time\: %{DATESTAMP_OTHER:hds_task_start}\, End Time\: %{DATESTAMP_OTHER:hds_task_end}\, Adhoc\: %{WORD:hds_task_sub} %{GREEDYDATA:hdssource}
+#CISCOHDS005 <%{POSINT:syslog_pri}>%{WORD:source}:\s+%{TIMESTAMP01}\s+%{LOGLEVEL:level}\s+%{WORD:hdsinstance}\s+\[(?<hdsresource>[^\]]+)\]\s+\- %{CISCOHDSMSG} %{INT:adr_sync} %{GREEDYDATA:hdssource}
+#CISCOHDS006 <%{POSINT:syslog_pri}>%{WORD:source}:\s+%{TIMESTAMP01}\s+%{LOGLEVEL:level}\s+%{WORD:hdsinstance}\s+\[(?<hdsresource>[^\]]+)\]\s+\- %{CISCOHDSMSG} %{UUID:hds_msg_id} with %{INT:hds_hmac} hmac terms took %{INT:hds_mills} millis to index. %{GREEDYDATA:hdssource}
+#CISCOHDS007 <%{POSINT:syslog_pri}>%{WORD:source}:\s+%{TIMESTAMP01}\s+%{LOGLEVEL:level}\s+%{WORD:hdsinstance}\s+\[(?<hdsresource>[^\]]+)\]\s+\- %{CISCOHDSMSG} %{UUID:hds_request_id} not matched. %{GREEDYDATA:hdssource}
+#CISCOHDS008 <%{POSINT:syslog_pri}>%{WORD:source}:\s+%{TIMESTAMP01}\s+%{LOGLEVEL:level}\s+%{WORD:hdsinstance}\s+\[(?<hdsresource>[^\]]+)\]\s+\- %{CISCOHDSMSG} \(url = %{URI:hds_failed_url}\) %{GREEDYDATA:hdssource}
 #
-# <11>kms: 2017-09-15 11:32:37.350 (+0000) ERROR KMS [main] - Health check failed: Error executing request (url = https://encryption-a.wbx2.com/enc
-ryption/api/v1/kms/99c264ee-5392-4aa0-8ddc-76b70fe70d39/health - trackingId: (no trackingId)) (count 1) (KmsServer.java:563)
-CISCOHDS009 <%{POSINT:syslog_pri}>%{WORD:source}:\s+%{TIMESTAMP01}\s+%{LOGLEVEL:level}\s+%{WORD:hdsinstance}\s+\[(?<hdsresource>[^\]]+)\]\s+\-\s+%{
-CISCOHDSERROR:hdserror}\s+%{CISCOHDSERRCAUSE:hdserrcause}\s+%{HDSTAG04:hdserrmsg}\s+\(%{WORD}\s+%{INT:hdserrcount}\)\s+%{GREEDYDATA:hdssource}
+# <11>kms: 2017-09-15 11:32:37.350 (+0000) ERROR KMS [main] - Health check failed: Error executing request (url = https://encryption-a.wbx2.com/encryption/api/v1/kms/99c264ee-5392-4aa0-8ddc-76b70fe70d39/health - trackingId: (no trackingId)) (count 1) (KmsServer.java:563)
+CISCOHDS009 <%{POSINT:syslog_pri}>%{WORD:source}:\s+%{TIMESTAMP01}\s+%{LOGLEVEL:level}\s+%{WORD:hdsinstance}\s+\[(?<hdsresource>[^\]]+)\]\s+\-\s+%{CISCOHDSERROR:hdserror}\s+%{CISCOHDSERRCAUSE:hdserrcause}\s+%{HDSTAG04:hdserrmsg}\s+\(%{WORD}\s+%{INT:hdserrcount}\)\s+%{GREEDYDATA:hdssource}
 #
-# <14>avalon: 2017-09-22 08:09:06.127 (+0000) INFO ADR [executor.cerberus-executor.0-6] - Slow dns lookup for identity.webex.com: 604ms (ParallelDn
-sResolver.java:116)
-# <14>avalon: 2017-09-15 11:30:02.516 (+0000) INFO  ADR [ServiceMonitor] - Slow dns lookup for identity.webex.com: 514ms (ParallelDnsResolver.java:
-116) 
+# <14>avalon: 2017-09-22 08:09:06.127 (+0000) INFO ADR [executor.cerberus-executor.0-6] - Slow dns lookup for identity.webex.com: 604ms (ParallelDnsResolver.java:116)
+# <14>avalon: 2017-09-15 11:30:02.516 (+0000) INFO  ADR [ServiceMonitor] - Slow dns lookup for identity.webex.com: 514ms (ParallelDnsResolver.java:116)
 CISCOHDS010 <%{POSINT:syslog_pri}>%{WORD:source}:\s+%{TIMESTAMP01}\s+%{LOGLEVEL:level}\s+%{WORD:hdsinstance}\s+\[(?<hdsresource>[^\]]+)\]\s+\-\s+%{
 CISCOHDSMSG}\s+%{HOSTNAME:dnsresource}\:\s+%{INT:dnsresptime}ms\s+%{GREEDYDATA:hdssource}
 #
-# <14>avalon: 2017-09-15 11:30:02.515 (+0000) INFO  ADR [ServiceMonitor] - DNS query(long):  513ms, query: identity.webex.com.  (LoggingResolver.ja
-va:97) 
-CISCOHDS011 <%{POSINT:syslog_pri}>%{WORD:source}:\s+%{TIMESTAMP01}\s+%{LOGLEVEL:level}\s+%{WORD:hdsinstance}\s+\[(?<hdsresource>[^\]]+)\]\s+\-\s+%{
-CISCOHDSMSG}\s+%{INT:dnsresptime}ms,\s+query:\s+%{HOSTNAME:dnsresource}.\s+%{GREEDYDATA:hdssource}
+# <14>avalon: 2017-09-15 11:30:02.515 (+0000) INFO  ADR [ServiceMonitor] - DNS query(long):  513ms, query: identity.webex.com.  (LoggingResolver.java:97)
+CISCOHDS011 <%{POSINT:syslog_pri}>%{WORD:source}:\s+%{TIMESTAMP01}\s+%{LOGLEVEL:level}\s+%{WORD:hdsinstance}\s+\[(?<hdsresource>[^\]]+)\]\s+\-\s+%{CISCOHDSMSG}\s+%{INT:dnsresptime}ms,\s+query:\s+%{HOSTNAME:dnsresource}.\s+%{GREEDYDATA:hdssource}
 
-# <14>kms: 2017-09-22 10:19:43.999 (+0000) INFO  KMS [pool-11-thread-15] - [KMS:RESPONSE] (id:ea73a57c-4d3c-454d-85b9-541995cb2975) sending success
- response synchronously in 1 ms (KmsMessageHandler.java:118) 
-CISCOHDS012 <%{POSINT:syslog_pri}>%{WORD:source}:\s+%{TIMESTAMP01}\s+%{LOGLEVEL:level}\s+%{WORD:hdsinstance}\s+\[(?<hdsresource>[^\]]+)\]\s+\-\s+\[
-(?<hdsaction>[^\]]+)\]\s+\(id:%{UUID:kmsid}\)\s+sending\s+success\s+response\s+synchronously\s+in\s+%{INT:hdssuccessms}[^\(]+\s+%{GREEDYDATA:hdssou
-rce}
+# <14>kms: 2017-09-22 10:19:43.999 (+0000) INFO  KMS [pool-11-thread-15] - [KMS:RESPONSE] (id:ea73a57c-4d3c-454d-85b9-541995cb2975) sending success response synchronously in 1 ms (KmsMessageHandler.java:118)
+CISCOHDS012 <%{POSINT:syslog_pri}>%{WORD:source}:\s+%{TIMESTAMP01}\s+%{LOGLEVEL:level}\s+%{WORD:hdsinstance}\s+\[(?<hdsresource>[^\]]+)\]\s+\-\s+\[(?<hdsaction>[^\]]+)\]\s+\(id:%{UUID:kmsid}\)\s+sending\s+success\s+response\s+synchronously\s+in\s+%{INT:hdssuccessms}[^\(]+\s+%{GREEDYDATA:hdssource}
 
-# <14>kms: 2017-09-22 10:36:57.628 (+0000) INFO KMS [Grizzly(2)] - Mercury event received, type: encryption.kms_message, messageId: d482f049-6264-4
-209-af3c-127d4a42d70a, trackingId: NA_09831850-883c-4144-a0e5-7b9a88f933a7 (KmsFlowController.java:217)
-CISCOHDS013 <%{POSINT:syslog_pri}>%{WORD:source}:\s+%{TIMESTAMP01}\s+%{LOGLEVEL:level}\s+%{WORD:hdsinstance}\s+\[(?<hdsresource>[^\]]+)\]\s+\-\s+Me
-rcury event received,\s+type:\s+(?<hdsmercuryeventtype>[^,]+),\s+messageId:\s+(?<hdsmercurymessageid>[^,]+),\s+trackingId:\s+(?<hdsmercurytrackingi
-d>[^\s]+)\s+%{GREEDYDATA:hdssource}
+# <14>kms: 2017-09-22 10:36:57.628 (+0000) INFO KMS [Grizzly(2)] - Mercury event received, type: encryption.kms_message, messageId: d482f049-6264-4209-af3c-127d4a42d70a, trackingId: NA_09831850-883c-4144-a0e5-7b9a88f933a7 (KmsFlowController.java:217)
+CISCOHDS013 <%{POSINT:syslog_pri}>%{WORD:source}:\s+%{TIMESTAMP01}\s+%{LOGLEVEL:level}\s+%{WORD:hdsinstance}\s+\[(?<hdsresource>[^\]]+)\]\s+\-\s+Mercury event received,\s+type:\s+(?<hdsmercuryeventtype>[^,]+),\s+messageId:\s+(?<hdsmercurymessageid>[^,]+),\s+trackingId:\s+(?<hdsmercurytrackingid>[^\s]+)\s+%{GREEDYDATA:hdssource}
 
-# <14>kms: 2018-08-03 10:17:46.050 (+0000) INFO  KMS [main] - doKmsHealthCheck - requestId: 7cc94c91-3a45-44c8-975e-b4cc841fe3e3 responseCode: 200 
-timing: 837 ms (EncryptionClient.java:112) 
-CISCOHDS014 <%{POSINT:syslog_pri}>%{WORD:source}:\s+%{TIMESTAMP01}\s+%{LOGLEVEL:level}\s+%{WORD:hdsinstance}\s+\[(?<hdsresource>[^\]]+)\]\s+\-\s+%{
-CISCOHDSMSG}\s+-\s+requestId:\s+%{UUID:hds_request_id}\s+responseCode:\s+%{INT:response_code}\s+timing:\s+%{INT:response_time}\s+ms\s+%{GREEDYDATA:
-kmssource}
- 
-# <14>kms: 2018-08-03 10:17:44.593 (+0000) INFO  KMS [main] - U2C gettig site urls for services encryptionServiceSiteUrls [https://encryption.a6.ci
-scospark.com/encryption/api/v1, https://encryption.a7.ciscospark.com/encryption/api/v1] and mercuryConnectionSiteUrls [wss://mercury-connection.a6.
-ciscospark.com/v1, wss://mercury-connection.a7.ciscospark.com/v1]  (KmsServer.java:775)
-CISCOHDS015 <%{POSINT:syslog_pri}>%{WORD:source}:\s+%{TIMESTAMP01}\s+%{LOGLEVEL:level}\s+%{WORD:hdsinstance}\s+\[(?<hdsresource>[^\]]+)\]\s+\-\s+%{
-CISCOHDSMSG}\s+\[(?<siteURL1>[^,]+),\s+(?<siteURL2>[^,]+)\s+and\s+mercuryConnectionSiteUrls\s+\[(?<mercURL1>[^,]+),\s+(?<mercURL2>[^,]+)\]\s+%{GREE
-DYDATA:hdssource}
+# <14>kms: 2018-08-03 10:17:46.050 (+0000) INFO  KMS [main] - doKmsHealthCheck - requestId: 7cc94c91-3a45-44c8-975e-b4cc841fe3e3 responseCode: 200 timing: 837 ms (EncryptionClient.java:112)
+CISCOHDS014 <%{POSINT:syslog_pri}>%{WORD:source}:\s+%{TIMESTAMP01}\s+%{LOGLEVEL:level}\s+%{WORD:hdsinstance}\s+\[(?<hdsresource>[^\]]+)\]\s+\-\s+%{CISCOHDSMSG}\s+-\s+requestId:\s+%{UUID:hds_request_id}\s+responseCode:\s+%{INT:response_code}\s+timing:\s+%{INT:response_time}\s+ms\s+%{GREEDYDATA:kmssource}
 
-# <14>kms: 2018-08-06 10:17:08.656 (+0000) INFO  KMS [Grizzly(2)] - Controller encryption.a6.ciscospark.com::0, mercury [sync=false] event received
-, type: encryption.kms_message, messageId: 436ddbe7-fed8-453a-9c99-025ca1fce61e, trackingId: CLIENT_8562f9fd-2fa1-4cc7-9428-442fde3e6c32 (KmsFlowCo
-ntroller.java:159) 
-CISCOHDS016 <%{POSINT:syslog_pri}>%{WORD:source}:\s+%{TIMESTAMP01}\s+%{LOGLEVEL:level}\s+%{WORD:hdsinstance}\s+\[(?<hdsresource>[^\]]+)\]\s+\-\s+%{
-CISCOHDSMSG}\s+%{URIHOST:kmscontroller}\:\:%{NUMBER}\,\s+%{WORD:controllersource}\s+\[sync=%{BOOL:syncstate}\]\s+event received,\s+type\:\s+%{HDSTA
-G05:cntrltype}\,\s+messageId:\s+%{UUID:hdsmercurymessageid},\s+trackingId:\s+%{HDSTAG06:hdsmercurytrackingid}\s+%{GREEDYDATA:hdssource}
+# <14>kms: 2018-08-03 10:17:44.593 (+0000) INFO  KMS [main] - U2C gettig site urls for services encryptionServiceSiteUrls [https://encryption.a6.ciscospark.com/encryption/api/v1, https://encryption.a7.ciscospark.com/encryption/api/v1] and mercuryConnectionSiteUrls [wss://mercury-connection.a6.ciscospark.com/v1, wss://mercury-connection.a7.ciscospark.com/v1]  (KmsServer.java:775)
+CISCOHDS015 <%{POSINT:syslog_pri}>%{WORD:source}:\s+%{TIMESTAMP01}\s+%{LOGLEVEL:level}\s+%{WORD:hdsinstance}\s+\[(?<hdsresource>[^\]]+)\]\s+\-\s+%{CISCOHDSMSG}\s+\[(?<siteURL1>[^,]+),\s+(?<siteURL2>[^,]+)\s+and\s+mercuryConnectionSiteUrls\s+\[(?<mercURL1>[^,]+),\s+(?<mercURL2>[^,]+)\]\s+%{GREEDYDATA:hdssource}
 
-# <14>kms: 2018-08-07 13:51:17.510 (+0000) INFO  KMS [pool-12-thread-39] - postMessageToClient - responseCode: 202 timing: 130 ms (EncryptionClient
-.java:105) 
-CISCOHDS017 <%{POSINT:syslog_pri}>%{WORD:source}:\s+%{TIMESTAMP01}\s+%{LOGLEVEL:level}\s+%{WORD:hdsinstance}\s+\[(?<hdsresource>[^\]]+)\]\s+\-\s+%{
-CISCOHDSMSG}\s+-\s+responseCode:\s+%{INT:response_code}\s+timing:\s+%{INT:response_time}\s+ms\s+%{GREEDYDATA:kmssource}
+# <14>kms: 2018-08-06 10:17:08.656 (+0000) INFO  KMS [Grizzly(2)] - Controller encryption.a6.ciscospark.com::0, mercury [sync=false] event received, type: encryption.kms_message, messageId: 436ddbe7-fed8-453a-9c99-025ca1fce61e, trackingId: CLIENT_8562f9fd-2fa1-4cc7-9428-442fde3e6c32 (KmsFlowController.java:159)
+CISCOHDS016 <%{POSINT:syslog_pri}>%{WORD:source}:\s+%{TIMESTAMP01}\s+%{LOGLEVEL:level}\s+%{WORD:hdsinstance}\s+\[(?<hdsresource>[^\]]+)\]\s+\-\s+%{CISCOHDSMSG}\s+%{URIHOST:kmscontroller}\:\:%{NUMBER}\,\s+%{WORD:controllersource}\s+\[sync=%{BOOL:syncstate}\]\s+event received,\s+type\:\s+%{HDSTAG05:cntrltype}\,\s+messageId:\s+%{UUID:hdsmercurymessageid},\s+trackingId:\s+%{HDSTAG06:hdsmercurytrackingid}\s+%{GREEDYDATA:hdssource}
 
-# <14>kms: 2018-08-07 13:51:17.380 (+0000) INFO  KMS [pool-12-thread-39] - [KMS:RESPONSE] (TrackingID:CLIENT_de5b006a-98a0-4a76-9a24-e7f4f3cd06b2) 
-(message id:86ee12fb-851f-4242-9344-90f3ed251f81) sending success response asynchronously (EncryptionKmsMessageHandler.java:839) 
-CISCOHDS018 <%{POSINT:syslog_pri}>%{WORD:source}:\s+%{TIMESTAMP01}\s+%{LOGLEVEL:level}\s+%{WORD:hdsinstance}\s+\[(?<hdsresource>[^\]]+)\]\s+\-\s+%{
-CISCOHDSMSG}\s+\(TrackingID:%{HDSTAG06:hdsmercurytrackingid}\)\s+\(message\s+id:%{UUID:hdsmercurymessageid}\)\s+sending\s+success\s+response\s+asyn
-chronously\s+%{GREEDYDATA:kmssource}
+# <14>kms: 2018-08-07 13:51:17.510 (+0000) INFO  KMS [pool-12-thread-39] - postMessageToClient - responseCode: 202 timing: 130 ms (EncryptionClient.java:105)
+CISCOHDS017 <%{POSINT:syslog_pri}>%{WORD:source}:\s+%{TIMESTAMP01}\s+%{LOGLEVEL:level}\s+%{WORD:hdsinstance}\s+\[(?<hdsresource>[^\]]+)\]\s+\-\s+%{CISCOHDSMSG}\s+-\s+responseCode:\s+%{INT:response_code}\s+timing:\s+%{INT:response_time}\s+ms\s+%{GREEDYDATA:kmssource}
 
-# <14>kms: 2018-08-07 15:08:48.665 (+0000) INFO  KMS [pool-12-thread-119] - postMessageToClient - client exception - errorCode:null, errorBody:null
- (EncryptionClient.java:70) 
-CISCOHDS019 <%{POSINT:syslog_pri}>%{WORD:source}:\s+%{TIMESTAMP01}\s+%{LOGLEVEL:level}\s+%{WORD:hdsinstance}\s+\[(?<hdsresource>[^\]]+)\]\s+\-\s+%{
-CISCOHDSMSG}\s+-\s+client\s+exception\s+-\s+errorCode:%{HDSTAG07:errorcode},\s+errorBody:(?<errorbody>[^)]+)\s+%{GREEDYDATA:kmssource}
+# <14>kms: 2018-08-07 13:51:17.380 (+0000) INFO  KMS [pool-12-thread-39] - [KMS:RESPONSE] (TrackingID:CLIENT_de5b006a-98a0-4a76-9a24-e7f4f3cd06b2) (message id:86ee12fb-851f-4242-9344-90f3ed251f81) sending success response asynchronously (EncryptionKmsMessageHandler.java:839)
+CISCOHDS018 <%{POSINT:syslog_pri}>%{WORD:source}:\s+%{TIMESTAMP01}\s+%{LOGLEVEL:level}\s+%{WORD:hdsinstance}\s+\[(?<hdsresource>[^\]]+)\]\s+\-\s+%{CISCOHDSMSG}\s+\(TrackingID:%{HDSTAG06:hdsmercurytrackingid}\)\s+\(message\s+id:%{UUID:hdsmercurymessageid}\)\s+sending\s+success\s+response\s+asynchronously\s+%{GREEDYDATA:kmssource}
 
-# <11>kms: 2018-08-07 15:08:52.177 (+0000) ERROR KMS [main] - Health check failed for site encryption.a6.ciscospark.com due to: POST failed: HTTP/1
-.1 429 Too Many Requests (url = https://encryption.a6.ciscospark.com/encryption/api/v1/kms/21a5e2ad-fe54-48d9-9f25-d73f76aba40e/health, responseTra
-ckingId = ROUTER_5B69B5F3-9B14-01BB-3643-AD26DC343643)  (KmsServer.java:344) com.cisco.wx2.client.RetryAfterException: POST failed: HTTP/1.1 429 To
-o Many Requests (url = https://encryption.a6.ciscospark.com/encryption/api/v1/kms/21a5e2ad-fe54-48d9-9f25-d73f76aba40e/health, responseTrackingId =
- ROUTER_5B69B5F3-9B14-01BB-3643-AD26DC343643)
-CISCOHDS020 <%{POSINT:syslog_pri}>%{WORD:source}:\s+%{TIMESTAMP01}\s+%{LOGLEVEL:level}\s+%{WORD:hdsinstance}\s+\[(?<hdsresource>[^\]]+)\]\s+\-\s+%{
-CISCOHDSMSG}\s+%{URIHOST:kmscontroller}\s+due\s+to:\s+%{HDSTAG08:method}\s+failed:\s+HTTP/1.1\s+%{INT:response_code}\s+([^)]+)\s+\(url\s+=\s+(?<hds
-_failed_url>[^,]+),\s+responseTrackingId\s+=\s+(?<hdsmercurytrackingid>[^)]+)\)\s+%{GREEDYDATA:kmssource}
- 
+# <14>kms: 2018-08-07 15:08:48.665 (+0000) INFO  KMS [pool-12-thread-119] - postMessageToClient - client exception - errorCode:null, errorBody:null (EncryptionClient.java:70)
+CISCOHDS019 <%{POSINT:syslog_pri}>%{WORD:source}:\s+%{TIMESTAMP01}\s+%{LOGLEVEL:level}\s+%{WORD:hdsinstance}\s+\[(?<hdsresource>[^\]]+)\]\s+\-\s+%{CISCOHDSMSG}\s+-\s+client\s+exception\s+-\s+errorCode:%{HDSTAG07:errorcode},\s+errorBody:(?<errorbody>[^)]+)\s+%{GREEDYDATA:kmssource}
+
+# <11>kms: 2018-08-07 15:08:52.177 (+0000) ERROR KMS [main] - Health check failed for site encryption.a6.ciscospark.com due to: POST failed: HTTP/1.1 429 Too Many Requests (url = https://encryption.a6.ciscospark.com/encryption/api/v1/kms/21a5e2ad-fe54-48d9-9f25-d73f76aba40e/health, responseTra
+ckingId = ROUTER_5B69B5F3-9B14-01BB-3643-AD26DC343643)  (KmsServer.java:344) com.cisco.wx2.client.RetryAfterException: POST failed: HTTP/1.1 429 Too Many Requests (url = https://encryption.a6.ciscospark.com/encryption/api/v1/kms/21a5e2ad-fe54-48d9-9f25-d73f76aba40e/health, responseTrackingId = ROUTER_5B69B5F3-9B14-01BB-3643-AD26DC343643)
+CISCOHDS020 <%{POSINT:syslog_pri}>%{WORD:source}:\s+%{TIMESTAMP01}\s+%{LOGLEVEL:level}\s+%{WORD:hdsinstance}\s+\[(?<hdsresource>[^\]]+)\]\s+\-\s+%{CISCOHDSMSG}\s+%{URIHOST:kmscontroller}\s+due\s+to:\s+%{HDSTAG08:method}\s+failed:\s+HTTP/1.1\s+%{INT:response_code}\s+([^)]+)\s+\(url\s+=\s+(?<hds_failed_url>[^,]+),\s+responseTrackingId\s+=\s+(?<hdsmercurytrackingid>[^)]+)\)\s+%{GREEDYDATA:kmssource}
+
 #End Cisco HSD Pattern
