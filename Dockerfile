@@ -16,5 +16,5 @@ ADD opt/elasticsearch/config /opt/elasticsearch/config
 ADD opt/logstash/config /opt/logstash/config
 
 # add KMS patterns
-ADD tmp/patterns/ciscokms /tmp/patterns/ciscokms
+ADD tmp/patterns/ciscokms /usr/share/logstash/patterns/
 
